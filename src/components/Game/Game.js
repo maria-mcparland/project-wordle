@@ -7,20 +7,23 @@ import GuessInput from "../GuessInput";
 import GuessResults from "../GuessResults";
 import { GAME_STATUS } from "../../constants";
 
-// Pick a random word on every pageload.
-const answer = sample(WORDS);
-// To make debugging easier, we'll log the solution in the console.
-console.info({ answer });
-
 function Game() {
+  const [answer, setAnswer] = React.useState(sample(WORDS));
   const [guesses, setGuesses] = React.useState([]);
   const [gameResult, setGameResult] = React.useState(GAME_STATUS.RUNNING);
+  console.info({ answer });
 
   function handleSubmitGuess(tentativeGuess) {
     setGuesses([...guesses, tentativeGuess]);
     if (guesses.length === 5) {
       setGameResult(GAME_STATUS.LOST);
     }
+  }
+
+  function restartGame() {
+    setAnswer(sample(WORDS));
+    setGuesses([]);
+    setGameResult(GAME_STATUS.RUNNING);
   }
 
   return (
@@ -31,6 +34,7 @@ function Game() {
             <strong>Congratulations!</strong> Got it in
             <strong>{guesses.length} guesses</strong>.
           </p>
+          <button onClick={restartGame}>Restart</button>
         </div>
       )}
       {gameResult === GAME_STATUS.LOST && (
@@ -38,6 +42,7 @@ function Game() {
           <p>
             Sorry, the correct answer is <strong>{answer}</strong>.
           </p>
+          <button onClick={restartGame}>Restart</button>
         </div>
       )}
       <GuessResults

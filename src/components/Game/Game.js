@@ -3,27 +3,30 @@ import React from "react";
 import { sample } from "../../utils";
 import { WORDS } from "../../data";
 import GuessInput from "../GuessInput";
-import { PreviousGuesses } from "../PreviousGuesses";
+import { Guess } from "../Guess";
+import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 
 // Pick a random word on every pageload.
 const answer = sample(WORDS);
 // To make debugging easier, we'll log the solution in the console.
 console.info({ answer });
+let guessCount = 0;
 
 function Game() {
-  const [previousGuesses, setPreviousGuesses] = React.useState([]);
+  const [guesses, setGuesses] = React.useState(
+    Array(NUM_OF_GUESSES_ALLOWED).fill("     ")
+  );
 
   const addNewGuess = (guess) => {
-    const newGuess = {
-      guess,
-      key: crypto.randomUUID(),
-    };
-    const previousGuessesNext = [...previousGuesses, newGuess];
-    setPreviousGuesses(previousGuessesNext);
+    const previousGuessesNext = [...guesses];
+    previousGuessesNext[guessCount] = guess;
+    guessCount++;
+    setGuesses(previousGuessesNext);
+    console.log(guessCount);
   };
   return (
     <>
-      <PreviousGuesses previousGuesses={previousGuesses} />
+      <Guess guesses={guesses} />
       <GuessInput addNewGuess={addNewGuess} />
     </>
   );

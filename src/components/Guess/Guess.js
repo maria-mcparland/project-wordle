@@ -1,20 +1,15 @@
-export const Guess = ({ guesses }) => {
-  console.log(guesses);
+import { range } from "../../utils";
+
+const Guess = ({ value }) => {
   return (
-    <div className="guess-results">
-      {guesses.map((guess) => {
-        return (
-          <p className="guess" key={crypto.randomUUID()}>
-            {guess.split("").map((value) => (
-              <span className="cell" key={crypto.randomUUID()}>
-                {value}
-              </span>
-            ))}
-          </p>
-        );
-      })}
-    </div>
+    <p className="guess">
+      {range(5).map((num) => (
+        <span key={crypto.randomUUID()} className="cell">
+          {value ? value[num] : undefined}
+        </span>
+      ))}
+    </p>
   );
 };
 
-// create array of num guesses minus previous
+export default Guess;
